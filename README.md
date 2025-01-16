@@ -43,3 +43,6 @@
 ### tower.py
 - class Tower: Базовый класс для всех башен, его методы включают инициализацию, отрисовку, обновление, стрельбу, поворот к цели и поиск цели.
 - class BasicTower(Tower) и class SniperTower(Tower): Конкретные реализации башен, расширяющие базовый класс. Снайперская имеет собственный алгоритм выбора цели.
+## Демонстрация игры
+ ![image](https://github.com/user-attachments/assets/fbbb0910-1ce8-4b67-b6ae-955c5405ef9f)
+![image](https://github.com/user-attachments/assets/521d87fa-1764-46c6-83fd-d2c153d70618)
