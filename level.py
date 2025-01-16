@@ -1,7 +1,7 @@
 import pygame
 from enemy import Enemy
 from tower import BasicTower, SniperTower
-
+from settings import Settings
 
 class Level:
     '''
@@ -40,7 +40,7 @@ class Level:
         self.all_waves_complete = False
         self.start_next_wave()
         self.font = pygame.font.SysFont("Arial", 24)
-
+        self.settings = Settings()
     def start_next_wave(self):
         '''Запускает следующую волну врагов.'''
         if self.current_wave < len(self.waves):
@@ -75,6 +75,7 @@ class Level:
         current_time = pygame.time.get_ticks()
 
         if self.current_wave < len(self.waves) and self.spawned_enemies < len(self.waves[self.current_wave]):
+
             if current_time - self.last_spawn_time > self.spawn_delay:
                 enemy_info = self.waves[self.current_wave][self.spawned_enemies].copy()
                 enemy_info['game'] = self.game
@@ -82,7 +83,9 @@ class Level:
                 self.enemies.add(new_enemy)
                 self.spawned_enemies += 1
                 self.last_spawn_time = current_time
-
+                # Воспроизведение звука появления врагов
+                pygame.mixer.music.load(self.settings.enemy_spawn)
+                pygame.mixer.music.play(-1)  # Цикл музыки
         collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, False)
         for bullet in collisions:
             for enemy in collisions[bullet]:
@@ -96,14 +99,14 @@ class Level:
         if len(self.enemies) == 0 and self.current_wave < len(self.waves) - 1:
             self.current_wave += 1
             self.start_next_wave()
+
         elif len(self.enemies) == 0 and self.current_wave == len(self.waves) - 1:
             self.all_waves_complete = True
 
     def draw_path(self, screen):
         '''Отрисовывает путь врагов и позиции, доступные для размещения башен.'''
         pygame.draw.lines(screen, (0, 128, 0), False, self.game.settings.enemy_path, 5)
-        #for pos in self.game.settings.tower_positions:
-            #pygame.draw.circle(screen, (128, 0, 0), pos, 10)
+
 
     def draw(self, screen):
         '''Отрисовывает врагов, башни и снаряды на экране.'''

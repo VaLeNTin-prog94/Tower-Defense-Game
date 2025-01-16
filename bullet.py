@@ -1,6 +1,6 @@
 import pygame
 from pygame.math import Vector2
-
+from settings import Settings
 
 class Bullet(pygame.sprite.Sprite):
     """
@@ -25,7 +25,7 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = 5
         self.damage = damage
         self.velocity = self.calculate_velocity()
-
+        self.settings = Settings()
     def calculate_velocity(self):
         '''
         Вычисляет вектор скорости пули на основе направления к цели.
@@ -42,7 +42,9 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.center = self.position
         if self.position.distance_to(self.target) < 10 or not self.game.is_position_inside(self.position):
             self.kill()
-
+        # Воспроизведение звука выстрела
+        pygame.mixer.music.load(self.settings.shoot_sound)
+        pygame.mixer.music.play(-1)  # Цикл музыки
     def is_position_inside(self, pos):
         '''
         Проверяет, находится ли заданная позиция внутри границ экрана игры

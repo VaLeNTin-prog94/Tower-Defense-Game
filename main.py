@@ -43,6 +43,7 @@ class TowerDefenseGame:
         self.selected_tower_type = 'basic'
         self.is_game_over = False
         self.show_grid = False  # Изначально сетка скрыта
+
     def game_over(self):
         '''Обрабатывает состояние завершения игры.'''
         self.is_game_over = True

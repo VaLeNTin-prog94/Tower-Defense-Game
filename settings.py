@@ -57,6 +57,7 @@ class Settings:
         self.sell_sound = 'assets/sounds/sell.wav'
         self.enemy_hit_sound = 'assets/sounds/enemy_hit.wav'
         self.background_music = 'assets/sounds/background_music.mp3'
+        self.enemy_spawn = 'assets/sounds/enemy_spawn.wav'
 
         self.starting_money = 500
         self.lives = 20
