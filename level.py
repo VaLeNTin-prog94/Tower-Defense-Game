@@ -1,6 +1,6 @@
 import pygame
 from enemy import Enemy
-from tower import BasicTower, SniperTower
+from tower import BasicTower, SniperTower, MoneyTower
 from settings import Settings
 
 class Level:
@@ -57,7 +57,7 @@ class Level:
 
     def attempt_place_tower(self, mouse_pos, tower_type):
         '''Пытается разместить башню на сетке в указанной позиции.'''
-        tower_classes = {'basic': BasicTower, 'sniper': SniperTower}
+        tower_classes = {'basic': BasicTower, 'sniper': SniperTower, 'money': MoneyTower}
         if tower_type in tower_classes and self.game.settings.starting_money >= self.game.settings.tower_cost:
             grid_pos = self.game.grid.get_grid_position(mouse_pos)
             if self.game.grid.is_spot_available(grid_pos):
@@ -110,6 +110,7 @@ class Level:
 
     def draw(self, screen):
         '''Отрисовывает врагов, башни и снаряды на экране.'''
+
         self.draw_path(screen)
         self.enemies.draw(screen)
         self.towers.draw(screen)
@@ -121,3 +122,4 @@ class Level:
                 tower_stats_text = self.font.render(f"Damage: {tower.damage}, Range: {tower.tower_range}", True,
                                                     (255, 255, 255))
                 screen.blit(tower_stats_text, (tower.rect.x, tower.rect.y - 20))
+

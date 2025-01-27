@@ -1,5 +1,8 @@
+
 import pygame
 import sys
+
+
 from settings import Settings
 from level import Level
 from grid import Grid
@@ -40,7 +43,7 @@ class TowerDefenseGame:
         self.font = pygame.font.SysFont("Arial", 24)
 
         self.shoot_sound = pygame.mixer.Sound(self.settings.shoot_sound)
-        self.selected_tower_type = 'basic'
+        self.selected_tower_type = None
         self.is_game_over = False
         self.show_grid = False  # Изначально сетка скрыта
 
@@ -61,11 +64,13 @@ class TowerDefenseGame:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # Проверяем, нажата ли клавиша пробела
                     self.show_grid = not self.show_grid  # Переключаем состояние отображения сетки
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
+                elif event.key == pygame.K_1:
                     self.selected_tower_type = 'basic'
                     print("Selected basic tower.")
                 elif event.key == pygame.K_2:
+                    self.selected_tower_type = 'money'
+                    print("Selected money tower.")
+                elif event.key == pygame.K_3:
                     self.selected_tower_type = 'sniper'
                     print("Selected sniper tower.")
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -129,6 +134,7 @@ class TowerDefenseGame:
     def run_game(self):
         '''Запускает основной цикл игры.'''
         while True:
+
             self._check_events()
             self._update_game()
 

@@ -1,6 +1,7 @@
 import pygame
 from bullet import Bullet
 import math
+import time
 
 
 class Tower(pygame.sprite.Sprite):
@@ -155,3 +156,42 @@ class SniperTower(Tower):
         '''Создает пулю и добавляет ее в группу.'''
         new_bullet = Bullet(self.position, target.position, self.damage, self.game)
         bullets_group.add(new_bullet)
+
+class MoneyTower(Tower):
+    '''
+    Башня, генерирующая деньги для игрока.
+
+    Наследуется от класса Tower.
+
+    Атрибуты:
+        image (Surface): Изображение башни.
+        original_image (Surface): Исходное изображение башни.
+        money_per_tick (int): Сумма денег, добавляемая за один цикл.
+        money_rate (int): Время между генерацией денег (в миллисекундах).
+    '''
+    def __init__(self, position, game):
+        super().__init__(position, game)
+        self.image = pygame.image.load('assets/towers/money_tower.png').convert_alpha()
+        self.original_image = self.image
+        self.rect = self.image.get_rect(center=self.position)
+
+        self.money_per_tick = 10  # Сумма денег за цикл
+        self.money_rate = 5000  # Время между циклами (в миллисекундах)
+        self.last_money_time = pygame.time.get_ticks()
+
+    def update(self, enemies, current_time, bullets_group):
+        '''Генерирует деньги, если прошло достаточно времени.'''
+        if current_time - self.last_money_time >= self.money_rate:
+            self.game.settings.starting_money += self.money_per_tick
+            self.last_money_time = current_time
+
+    def upgrade(self):
+        '''Улучшает башню, увеличивая сумму денег за цикл.'''
+        super().upgrade()
+        self.money_per_tick += 5
+        self.money_rate = max(1000, self.money_rate - 500)  # Уменьшаем интервал до минимального значения
+
+    def draw(self, screen):
+        super().draw(screen)
+        income_text = self.game.font.render(f"+${self.money_per_tick}/cycle", True, (255, 255, 0))
+        screen.blit(income_text, (self.rect.x, self.rect.y - 40))
