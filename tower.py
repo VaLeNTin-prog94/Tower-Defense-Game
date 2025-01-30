@@ -195,3 +195,4 @@ class MoneyTower(Tower):
         super().draw(screen)
         income_text = self.game.font.render(f"+${self.money_per_tick}/cycle", True, (255, 255, 0))
         screen.blit(income_text, (self.rect.x, self.rect.y - 40))
+

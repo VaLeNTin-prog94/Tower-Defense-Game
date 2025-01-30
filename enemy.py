@@ -22,12 +22,12 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load(image_path).convert_alpha()
         self.rect = self.image.get_rect()
         self.game = game
-        self.path = path
+        self.path = self.game.settings.enemy_path
         self.path_index = 0
         self.speed = speed
         self.health = health
-        self.position = Vector2(path[0])
-        self.rect.center = self.position
+        self.position = pygame.math.Vector2(self.path[self.path_index])
+        #self.rect.center = self.position
 
     def take_damage(self, amount):
         ''' Уменьшает здоровье врага на заданное количество.'''
@@ -36,18 +36,21 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
 
     def update(self):
-        '''Обновляет положение врага по пути и проверяет, достиг ли он конца пути.'''
+        '''Обновляет позицию врага, двигая его по пути'''
         if self.path_index < len(self.path) - 1:
-            start_point = Vector2(self.path[self.path_index])
-            end_point = Vector2(self.path[self.path_index + 1])
-            direction = (end_point - start_point).normalize()
+            target_pos = pygame.math.Vector2(self.path[self.path_index + 1])
+            direction = target_pos - self.position
+            distance = direction.length()
 
-            self.position += direction * self.speed
-            self.rect.center = self.position
+            if distance > 0:
+                direction = direction.normalize()
+                self.position += direction * self.speed
+                self.rect.center = self.position
 
-            if self.position.distance_to(end_point) < self.speed:
+            # Проверяем, достигли ли следующей точки маршрута
+            if distance < self.speed:
                 self.path_index += 1
 
-            if self.path_index >= len(self.path) - 1:
-                self.game.game_over()
-                self.kill()
+        else:
+            # Враг достиг конца пути, можно убрать его из игры
+            self.kill()
